@@ -48,6 +48,12 @@ private:
     inline int getSize(Node *root){
         return (root==NULL?0:root->size);
     }
+
+    int findMin(Node *ptr){
+        while(ptr->left!=NULL)ptr=ptr->left;
+        return ptr->data;
+    }
+
     Node* insert(Node *root,int data){
         if(root==NULL){
             root=pool.getMem();
