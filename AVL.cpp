@@ -87,6 +87,26 @@ private:
         return RR(prevRoot);
     }
 
+    Node* balance(Node *root){
+        if(root==NULL)return NULL;
+        int lH=getHeight(root->left);
+        int rH=getHeight(root->right);
+        if(lH-rH>1){
+            int llH=getHeight(root->left->left);
+            int lrH=getHeight(root->left->right);
+            if(llH>=lrH)root=LL(root);
+            else  root=LR(root);
+        }else if(lH-rH<-1){
+            int rlH=getHeight(root->right->left);
+            int rrH=getHeight(root->right->right);
+            if(rrH>=rlH)root=RR(root);
+            else root=RL(root);
+        }
+        root->height=1+max(getHeight(root->left),getHeight(root->right));
+        root->size=1+getSize(root->left)+getSize(root->right);
+        return root;
+    }
+
     Node* insert(Node *root,int data){
         if(root==NULL){
             root=pool.getMem();
@@ -101,9 +121,7 @@ private:
         }else if(root->data<data){
             root->right=insert(root->right,data);
         }
-        root->height=1+max(getHeight(root->left),getHeight(root->right));
-        root->size=1+getSize(root->left)+getSize(root->right);
-        return root;
+        return balance(root);
     }
 
     Node* remove(Node *root,int data){
@@ -131,9 +149,7 @@ private:
                 root->right=remove(root->right,replacement);
             }
         }
-        root->height=1+max(getHeight(root->left),getHeight(root->right));
-        root->size=1+getSize(root->left)+getSize(root->right);
-        return root;
+        return balance(root);
     }
 public:
     AVL(){
