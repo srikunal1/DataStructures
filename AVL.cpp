@@ -48,6 +48,24 @@ private:
     inline int getSize(Node *root){
         return (root==NULL?0:root->size);
     }
+    Node* insert(Node *root,int data){
+        if(root==NULL){
+            root=pool.getMem();
+            root->data=data;
+            root->left=NULL;
+            root->right=NULL;
+            root->height=0;
+            root->size=1;
+            return root;
+        }else if(root->data>data){
+            root->left=insert(root->left,data);
+        }else if(root->data<data){
+            root->right=insert(root->right,data);
+        }
+        root->height=1+max(getHeight(root->left),getHeight(root->right));
+        root->size=1+getSize(root->left)+getSize(root->right);
+        return root;
+    }
 public:
     AVL(){
         init();
@@ -55,6 +73,9 @@ public:
     void init(){
         root=NULL;
         pool.init();
+    }
+    void insert(int data){
+        root=insert(root,data);
     }
 };
 
