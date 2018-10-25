@@ -54,6 +54,39 @@ private:
         return ptr->data;
     }
 
+    Node* LL(Node *prevRoot){
+        Node *newRoot=prevRoot->left;
+        prevRoot->left=newRoot->right;
+        newRoot->right=prevRoot;
+        prevRoot->height=1+max(getHeight(prevRoot->left),getHeight(prevRoot->right));
+        prevRoot->size=1+getSize(prevRoot->left)+getSize(prevRoot->right);
+        newRoot->height=1+max(getHeight(newRoot->left),getHeight(newRoot->right));
+        newRoot->size=1+getSize(newRoot->left)+getSize(newRoot->right);
+        return newRoot;
+    }
+    Node* RR(Node *prevRoot){
+        Node *newRoot=prevRoot->right;
+        prevRoot->right=newRoot->left;
+        newRoot->left=prevRoot;
+        prevRoot->height=1+max(getHeight(prevRoot->left),getHeight(prevRoot->right));
+        prevRoot->size=1+getSize(prevRoot->left)+getSize(prevRoot->right);
+        newRoot->height=1+max(getHeight(newRoot->left),getHeight(newRoot->right));
+        newRoot->size=1+getSize(newRoot->left)+getSize(newRoot->right);
+        return newRoot;
+    }
+    Node* LR(Node *prevRoot){
+        prevRoot->left=RR(prevRoot->left);
+        prevRoot->height=1+max(getHeight(prevRoot->left),getHeight(prevRoot->right));
+        prevRoot->size=1+getSize(prevRoot->left)+getSize(prevRoot->right);
+        return LL(prevRoot);
+    }
+    Node* RL(Node *prevRoot){
+        prevRoot->right=LL(prevRoot->right);
+        prevRoot->height=1+max(getHeight(prevRoot->left),getHeight(prevRoot->right));
+        prevRoot->size=1+getSize(prevRoot->left)+getSize(prevRoot->right);
+        return RR(prevRoot);
+    }
+
     Node* insert(Node *root,int data){
         if(root==NULL){
             root=pool.getMem();
