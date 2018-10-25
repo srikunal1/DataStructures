@@ -72,6 +72,36 @@ private:
         root->size=1+getSize(root->left)+getSize(root->right);
         return root;
     }
+
+    Node* remove(Node *root,int data){
+        if(root==NULL){
+            return NULL;
+        }else if(root->data>data){
+            root->left=remove(root->left,data);
+        }else if(root->data<data){
+            root->right=remove(root->right,data);
+        }else{
+            //this  is the Node
+            if(root->left==NULL && root->right==NULL){
+                //leaf node
+                pool.freeMem(root->poolIndex);
+                return NULL;
+            }else if(root->left==NULL){
+                pool.freeMem(root->poolIndex);
+                return root->right;
+            }else if(root->right==NULL){
+                pool.freeMem(root->poolIndex);
+                return root->left;
+            }else{
+                int replacement=findMin(root->right);//inorder successor
+                root->data=replacement;
+                root->right=remove(root->right,replacement);
+            }
+        }
+        root->height=1+max(getHeight(root->left),getHeight(root->right));
+        root->size=1+getSize(root->left)+getSize(root->right);
+        return root;
+    }
 public:
     AVL(){
         init();
@@ -82,6 +112,9 @@ public:
     }
     void insert(int data){
         root=insert(root,data);
+    }
+    void remove(int data){
+        root=remove(root,data);
     }
 };
 
