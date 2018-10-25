@@ -151,6 +151,15 @@ private:
         }
         return balance(root);
     }
+    Node* search(int data){
+        Node *ptr=root;
+        while(ptr!=NULL){
+            if(ptr->data>data)ptr=ptr->left;
+            else if(ptr->data<data)ptr=ptr->right;
+            else break;//found it
+        }
+        return ptr;
+    }
 public:
     AVL(){
         init();
@@ -164,6 +173,9 @@ public:
     }
     void remove(int data){
         root=remove(root,data);
+    }
+    boolean exists(int data){
+        return (search(data)!=NULL);
     }
 };
 
