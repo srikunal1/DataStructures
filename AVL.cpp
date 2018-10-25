@@ -37,6 +37,27 @@ public:
         b(b+1)%N;
     }
 };
+
+class AVL{
+private:
+    Mem pool;
+    Node *root;
+    inline int getHeight(Node *root){
+        return (root==NULL?-1:root->height);
+    }
+    inline int getSize(Node *root){
+        return (root==NULL?0:root->size);
+    }
+public:
+    AVL(){
+        init();
+    }
+    void init(){
+        root=NULL;
+        pool.init();
+    }
+};
+
 int main(){
     //driver functions can be added later
     return 0;
